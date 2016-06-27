@@ -27,8 +27,7 @@ client.send_hello_packet()
 # 'redgiant' is Monster Hunter 4 Ultimate
 client.set_game_name('redgiant')
 
-# Reading a WORD
-# IMPORTANT: This will be simplified. This is just for debugging for now.
+# Reading an Integer
 # Sending the Read Packet || client.ReadU32(Address) ; returns Integer ( Data )
 data = client.ReadU32(0x08369410)
 
