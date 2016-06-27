@@ -39,6 +39,7 @@ class PyNTR:
 		self.send_processes_packet()
 		self.send_heartbeat_packet()
 		self.read_packet()
+		return self.pid
 
 	def read_packet(self):
 		packet_header = self.socket.recv(84)
@@ -66,12 +67,12 @@ class PyNTR:
 		else:
 			return 0xDEADC0DE
 
-	def send_packet(self, packet_type, command, args=[], data=-1):
+	def send_packet(self, packet_type, command, args=[], data=b''):
 		self.sequence += 1000
-		if ((len(args)) >= 3) and (data is not -1):
-			data = data.to_bytes(args[2], 'little')
-		else:
-			data = b''
+		# if ((len(args)) >= 3) and (data is not -1):
+		# 	data = data.to_bytes(args[2], 'little')
+		# else:
+		# 	data = b''
 
 		#print(data)
 		packet_header = array('I', (0x12345678, self.sequence, packet_type, command))
@@ -116,7 +117,43 @@ class PyNTR:
 	def send_write_memory_packet(self, addr, length, data):
 		print("Sending WMemory Packet")
 		print("%02x\t%08x\t%x" % (self.pid, addr, length))
-		print("%x" % data)
+		#print("Data: "+data)
 		self.send_packet(0, 10, [self.pid, addr, length], data)
 
+	# Improved UI Commands
 
+	# Writing
+
+	def WriteCustom(self, addr, data, length):
+		# Safety checks and stuff
+		t = type(data)
+		if t == type(0):
+			if ((data >= 0x00) and (data < (0x100 ** length))):
+				data = data.to_bytes(length, 'little')
+			else:
+				raise Exception("WriteU%i: Invalid Data, must be in range 0-%i" % (8*length, ((0x100 * length)-1)))
+		self.send_write_memory_packet(addr, length, data)
+
+	def WriteU8(self, addr, data):
+		self.WriteCustom(addr, data, 1)
+	def WriteU16(self, addr, data):
+		self.WriteCustom(addr, data, 2)
+	def WriteU32(self, addr, data):
+		self.WriteCustom(addr, data, 4)
+	def WriteU64(self, addr, data):
+		self.WriteCustom(addr, data, 8)
+
+	# Reading
+
+	def ReadCustom(self, addr, length):
+		self.send_read_memory_packet(addr, length)
+		return int.from_bytes(self.read_packet(), byteorder='little')
+
+	def ReadU8(self, addr):
+		return self.ReadCustom(addr, 1)
+	def ReadU16(self, addr):
+		return self.ReadCustom(addr, 2)
+	def ReadU32(self, addr):
+		return self.ReadCustom(addr, 4)
+	def ReadU64(self, addr):
+		return self.ReadCustom(addr, 8)

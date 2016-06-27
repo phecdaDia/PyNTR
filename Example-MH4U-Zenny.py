@@ -1,6 +1,6 @@
 # PyNTR Demo Program 2
 #
-#	Name: 	MH4U-US-MaxZenny.py
+#	Name: 	Example-MH4U-Zenny.py
 #	Author:	imthe666st
 #
 
@@ -17,12 +17,10 @@ client.start_connection()
 client.set_game_name('redgiant')
 
 # Get current Zenny
-# TODO: Simplify this
-client.send_read_memory_packet(0x08369410, 0x4)
-zenny = int.from_bytes(client.read_packet(), byteorder='little')
+zenny = client.ReadU32(0x08369410)
 
 # Print it out
 print("%08x -> %i" % (zenny, zenny))
 
 # Write a new value
-client.send_write_memory_packet(0x08369410, 0x4, 7777777)
+client.WriteU32(0x08369410, 7777777)

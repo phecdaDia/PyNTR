@@ -1,6 +1,6 @@
 # PyNTR Demo Program 1
 #
-#	Name: 	Hello.py
+#	Name: 	Example-Hello.py
 #	Author:	imthe666st
 #
 

@@ -25,18 +25,15 @@ client.send_hello_packet()
 
 # Get the PID of a process by name || client.set_game_name(GameName)
 # 'redgiant' is Monster Hunter 4 Ultimate
-client.set_game_name('redgiant')
+client.set_game_name('redgiant') ; returns Integer ( Pid )
 
 # Reading a WORD
 # IMPORTANT: This will be simplified. This is just for debugging for now.
-# Sending the Read Packet || client.send_read_memory_packet(Address, Length)
-client.send_read_memory_packet(0x08369410, 0x4)
+# Sending the Read Packet || client.ReadU32(Address) ; returns Integer ( Data )
+data = client.ReadU32(0x08369410)
 
-# Convert the read bytes to an Integer
-data = int.from_bytes(client.read_packet(), byteorder='little')
-
-# Writing a new value || client.send_write_memory_packet(Address, Length, Data)
-client.send_write_memory_packet(0x08369410, 0x4, 7777777)
+# Writing a new value || client.WriteU32(Address, Data)
+client.WriteU32(0x08369410, 7777777)
 
 # This would set the Zenny to 7777777 in MH4U (US)
 ```
