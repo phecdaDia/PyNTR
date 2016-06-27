@@ -23,9 +23,9 @@ client = PyNTR('192.168.0.11')
 # Testing the connection with a "Hello" packet || client.send_hello_packet()
 client.send_hello_packet()
 
-# Get the PID of a process by name || client.set_game_name(GameName)
+# Get the PID of a process by name || client.set_game_name(GameName) ; returns Integer ( Pid )
 # 'redgiant' is Monster Hunter 4 Ultimate
-client.set_game_name('redgiant') ; returns Integer ( Pid )
+client.set_game_name('redgiant')
 
 # Reading a WORD
 # IMPORTANT: This will be simplified. This is just for debugging for now.
