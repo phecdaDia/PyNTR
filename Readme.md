@@ -8,10 +8,8 @@ Feature | Status | Note
 ---|---|---
 Connecting | Done | 
 Raw packet sending | Nearly Done | Remoteplay is still missing
-Reading Memory | Done | UI Library still missing
-Writing Memory | Nearly Done | UI Library still missing / Writing as int, not bytes
-PyNTR Plugin Support | In Development | PyNTR Plugins aren't NTR Plugins.
-___
+Reading Memory | Done | 
+Writing Memory | Done | 
 ### Examples
 ```Python
 # Importing the PyNTR Class
