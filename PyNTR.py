@@ -124,12 +124,12 @@ class PyNTR:
 
 	# Writing
 
-	def WriteCustom(self, addr, data, length):
+	def WriteCustom(self, addr, data, length, isSigned=False):
 		# Safety checks and stuff
 		t = type(data)
 		if t == type(0):
 			if ((data >= 0x00) and (data < (0x100 ** length))):
-				data = data.to_bytes(length, 'little')
+				data = data.to_bytes(length, 'little', signed=isSigned)
 			else:
 				raise Exception("WriteU%i: Invalid Data, must be in range 0-%i" % (8*length, ((0x100 * length)-1)))
 		self.send_write_memory_packet(addr, length, data)
@@ -143,11 +143,20 @@ class PyNTR:
 	def WriteU64(self, addr, data):
 		self.WriteCustom(addr, data, 8)
 
+	def Write8(self, addr, data):
+		self.WriteCustom(addr, data, 1, isSigned=True)
+	def Write16(self, addr, data):
+		self.WriteCustom(addr, data, 2, isSigned=True)
+	def Write32(self, addr, data):
+		self.WriteCustom(addr, data, 4, isSigned=True)
+	def Write64(self, addr, data):
+		self.WriteCustom(addr, data, 8, isSigned=True)
+
 	# Reading
 
-	def ReadCustom(self, addr, length):
+	def ReadCustom(self, addr, length, isSigned=False):
 		self.send_read_memory_packet(addr, length)
-		return int.from_bytes(self.read_packet(), byteorder='little')
+		return int.from_bytes(self.read_packet(), byteorder='little', signed=isSigned)
 
 	def ReadU8(self, addr):
 		return self.ReadCustom(addr, 1)
@@ -157,3 +166,12 @@ class PyNTR:
 		return self.ReadCustom(addr, 4)
 	def ReadU64(self, addr):
 		return self.ReadCustom(addr, 8)
+
+	def Read8(self, addr):
+		return self.ReadCustom(addr, 1, isSigned=True)
+	def Read16(self, addr):
+		return self.ReadCustom(addr, 2, isSigned=True)
+	def Read32(self, addr):
+		return self.ReadCustom(addr, 4, isSigned=True)
+	def Read64(self, addr):
+		return self.ReadCustom(addr, 8, isSigned=True)
