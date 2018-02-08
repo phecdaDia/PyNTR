@@ -56,7 +56,7 @@ class PyNTR:
 
 		if packet_header[3] == 0:
 			if self.game_name is not None:
-				m = re.search('pid: 0x([0-9a-f]{8}), pname: %s' % self.game_name, packet_data.decode())
+				m = re.search('pid: 0x([0-9a-f]{8}), pname:\s+%s' % self.game_name, packet_data.decode())
 				if m:
 					self.pid = int(m.group(1), 16)
 					print("Setting pid to %x" % self.pid)
